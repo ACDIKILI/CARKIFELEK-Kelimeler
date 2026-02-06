@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CARKIFELEK - Kelimeler</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <style>
+        body { margin: 0; background-color: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; font-family: 'Arial Black', sans-serif; color: white; }
+        .phone-frame { width: 360px; height: 640px; background-color: #0a0a0a; border: 8px solid #1a1a1a; border-radius: 40px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 20px; box-shadow: 0 0 50px rgba(0,0,0,1); }
+        #login-screen, #game-screen-2 { position: absolute; inset: 0; background: #0a0a0a; z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 32px; }
+        #game-screen-2 { display: none; z-index: 1100; justify-content: flex-start; padding-top: 20px; }
+        .login-input { background: #1a1a1a; border: 2px solid #fbc02d; color: #fff; padding: 12px; border-radius: 10px; width: 220px; text-align: center; font-size: 18px; text-transform: uppercase; outline: none; margin: 20px 0; }
+        .start-btn { background: #fbc02d; color: #000; padding: 15px 40px; border: none; border-radius: 12px; font-weight: 900; cursor: pointer; font-size: 16px; }
+        .game-title { font-size: 22px; color: #fbc02d; margin-bottom: 20px; font-weight: 900; text-align: center; }
+        .top-menu { width: 320px; display: flex; justify-content: center; gap: 12px; }
+        .header-box { background-color: #fbc02d; border: 3px solid #000; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #000; width: 95px; height: 60px; }
+        .box-label { font-size: 11px; font-weight: 900; }
+        .box-val { font-size: 20px; font-weight: 900; }
+        #status-bar { width: 90%; text-align: center; color: #fbc02d; margin-top: 15px; min-height: 45px; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 900; }
+        .ok-btn { width: 60px; height: 40px; background: #00ff00; border: 3px solid #000; border-radius: 8px; color: #000; font-weight: 900; cursor: pointer; display: none; }
+        .wheel-container { position: relative; width: 310px; height: 310px; margin-top: 15px; }
+        #wheel-canvas { width: 100%; height: 100%; }
+        .pointer-wrapper { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); z-index: 100; transform-origin: center 5px; transition: transform 0.05s; }
+        .pointer { width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-top: 45px solid #fbc02d; filter: drop-shadow(0 4px 4px #000); }
+        #spin-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; background: #fbc02d; border: 4px solid #000; border-radius: 50%; color: #000; font-weight: 900; cursor: pointer; z-index: 200; display: flex; align-items: center; justify-content: center; }
+        .word-container { display: flex; gap: 5px; margin-top: 15px; justify-content: center; flex-wrap: wrap; width: 90%; }
+        .letter-box { width: 32px; height: 38px; border: 2px solid #fbc02d; display: flex; align-items: center; justify-content: center; font-size: 22px; background: #1a1a1a; font-weight: 900; }
+        .letter-revealed { color: #fbc02d; }
+        .letter-missed { color: #ff0000; border: 2px solid #ff0000; }
+        .keyboard { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 15px; width: 98%; }
+        .key { background: #fbc02d; color: #000; padding: 10px 0; border-radius: 6px; font-size: 15px; cursor: pointer; min-width: 31px; font-weight: 900; border: none; }
+        .key:disabled { opacity: 0.3; }
+        .buldum-btn { background: #00ff00; color: #000; padding: 10px 25px; border: 3px solid #000; border-radius: 10px; font-weight: 900; margin-top: 10px; cursor: pointer; font-size: 16px; }
+        #world-screen { position: absolute; inset: 0; background: rgba(0,0,0,0.98); z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; border-radius: 32px; padding: 20px; }
+        .score-row { display: flex; justify-content: space-between; width: 90%; border-bottom: 1px solid #fbc02d; padding: 12px 5px; color: #fbc02d; font-size: 18px; }
+        .my-score { color: #00ff00; border: 2px solid #00ff00; border-radius: 10px; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+<div class="phone-frame">
+    <div id="login-screen">
+        <h1 style="color:#fbc02d; margin:0;">HOŞGELDİNİZ</h1>
+        <div class="game-title" style="margin-top:10px;">ÇARKIFELEK - Kelimeler</div>
+        <input type="text" id="player-name-input" class="login-input" placeholder="ADINIZI YAZIN" maxlength="12">
+        <button class="start-btn" onclick="startGame()">OYUNA BAŞLA</button>
+    </div>
+    <div class="game-title">ÇARKIFELEK - Kelimeler</div>
+    <div class="top-menu">
+        <div class="header-box"><span class="box-label">SKOR</span><div id="cur-val" class="box-val">0</div></div>
+        <div class="header-box"><span class="box-label">TOPLAM</span><div id="tot-val" class="box-val">0</div></div>
+    </div>
+    <div id="status-bar">
+        <span id="status-text">ÇEVİR VE BAŞLA!</span>
+        <button id="ok-btn" class="ok-btn" onclick="goToGamePage()">OK</button>
+    </div>
+    <div class="wheel-container">
+        <div class="pointer-wrapper" id="pointer-ui"><div class="pointer"></div></div>
+        <canvas id="wheel-canvas"></canvas>
+        <div id="spin-btn">BAS</div>
+    </div>
+    <button class="start-btn" style="margin-top:30px; width:220px;" onclick="showWorldScore()">DÜNYA REKORLARI</button>
+    <div id="game-screen-2">
+        <div class="game-title">KELİMEYİ TAHMİN ET</div>
+        <div id="round-info" style="color:#fbc02d; font-size:14px; font-weight: 900;"></div>
+        <div id="timer" style="color:red; font-size:24px; margin-top:5px; font-weight: 900;">SÜRE: 00</div>
+        <div class="word-container" id="word-display"></div>
+        <div id="rights-display" style="margin-top:10px; color:#fbc02d; font-size:14px; font-weight: 900;"></div>
+        <button id="buldum-btn" class="buldum-btn" onclick="activateBuldum()">BULDUM!</button>
+        <div class="keyboard" id="keyboard"></div>
+        <div id="result-area" style="margin-top:15px; font-size:24px; font-weight: 900;"></div>
+        <button id="continue-btn" class="start-btn" style="display:none;" onclick="backToWheel()">DEVAM</button>
+    </div>
+    <div id="world-screen">
+        <h2 style="color:#fbc02d; margin-bottom: 5px;">DÜNYA REKORLARI</h2>
+        <div id="my-rank-area" style="width:100%; display:flex; flex-direction:column; align-items:center;"></div>
+        <h3 style="color:#fbc02d; margin: 10px 0;">TOP 5 LİSTESİ</h3>
+        <div id="score-list" style="width:100%; display:flex; flex-direction:column; align-items:center;"></div>
+        <button class="start-btn" style="margin-top:20px;" onclick="document.getElementById('world-screen').style.display='none'">KAPAT</button>
+    </div>
+</div>
+<script>
+    // FIREBASE KUTSAL AYARLAR
+    const firebaseConfig = {
+        apiKey: "AIzaSyBbtvGBl8m1x8thDlsUUutvujedIBCC4PA",
+        authDomain: "blackjack-4x4.firebaseapp.com",
+        databaseURL: "https://blackjack-4x4-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "blackjack-4x4",
+        storageBucket: "blackjack-4x4.appspot.com",
+        messagingSenderId: "805180924640",
+        appId: "1:805180924640:web:c7da5f8c037b7ff5c26685"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const dbPath = 'kelime_odasi_players/';
+
+    const wordBank = {
+        "İSİM": ["ALİ", "CEM", "EDA", "EMRE", "ELİF", "KEREM", "MERYEM", "AHMET", "HAKAN", "GİZEM"],
+        "EŞYA": ["ÜTÜ", "RAF", "SAAT", "MASA", "DOLAP", "KİTAP", "MAKAS", "KALEM", "ÇANTA"],
+        "BİTKİ": ["GÜL", "OT", "LALE", "MEŞE", "ÇINAR", "YONCA", "SÜMBÜL", "AYÇİÇEK"],
+        "HAYVAN": ["AT", "KUŞ", "KEDİ", "ASLAN", "KAPLAN", "KARTAL", "ZÜRAFA", "BALİNA"],
+        "ÜLKE": ["ÇİN", "RUS", "MISIR", "İTALYA", "FRANSA", "ALMANYA", "TÜRKİYE", "İSPANYA"],
+        "ŞEHİR": ["VAN", "BOLU", "AYDIN", "BURSA", "ANKARA", "İSTANBUL", "BALIKESİR", "İZMİR"],
+        "MESLEK": ["AŞÇI", "HAKİM", "DOKTOR", "AVUKAT", "MÜHENDİS", "ÖĞRETMEN", "MİMAR"],
+        "SPOR": ["KOŞU", "BOKS", "TENİS", "GÜREŞ", "FUTBOL", "HENTBOL", "BASKETBOL"],
+        "GIDA": ["BAL", "TUZ", "EKMEK", "ÇORBA", "PEYNİR", "ZEYTİN", "PİLAV", "HELVA"],
+        "İÇECEK": ["SU", "SÜT", "ÇAY", "KAHVE", "AYRAN", "ŞERBET", "VİŞNE", "SALGAM"],
+        "OYUN": ["DAM", "OKEY", "TAVLA", "DAMA", "SATRANÇ", "DOMİNO", "PİŞPİŞ"],
+        "AĞAÇ": ["ÇAM", "DUT", "MEŞE", "ELMA", "İNCİR", "GÜRGEN", "ZEYTİN", "CEVİZ", "İĞDE"]
+    };
+
+    const cats = ["İSİM", "EŞYA", "BİTKİ", "HAYVAN", "ÜLKE", "ŞEHİR", "MESLEK", "SPOR", "GIDA", "İÇECEK", "OYUN", "AĞAÇ"];
+    const pts = ["100", "50", "1000", "1500", "2000", "1000", "150", "100", "1000", "250", "100", "150"];
+    const counts = ["5", "3", "3", "6", "4", "6", "7", "3", "3", "4", "5", "5"];
+
+    let playerName = ""; let totalScore = 0; let wheelScore = 0;
+    let wheelAngles = [0, 0, 0]; let spinning = false;
+    let selectedCat, selectedCount, targetWord = "";
+    let guessedLetters = []; let sesliHak = 0, sessizHak = 0, timeLeft = 0, timerInterval;
+    let isBuldumMode = false;
+
+    const canvas = document.getElementById('wheel-canvas');
+    const ctx = canvas.getContext('2d');
+    const pointerUI = document.getElementById('pointer-ui');
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTick() {
+        if(audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+        osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.04);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.04);
+    }
+
+    function startGame() {
+        const input = document.getElementById('player-name-input').value.trim().toUpperCase();
+        if (input.length < 2) return;
+        playerName = input;
+        database.ref(dbPath + playerName).once('value').then(snap => {
+            if(snap.exists()) {
+                totalScore = snap.val().totalScore || 0;
+            } else {
+                totalScore = 0;
+            }
+            document.getElementById('tot-val').innerText = totalScore;
+        });
+        document.getElementById('login-screen').style.display = 'none';
+        draw();
+    }
+
+    function draw() {
+        canvas.width = 600; canvas.height = 600;
+        ctx.clearRect(0,0,600,600);
+        drawRing(280, 205, cats, wheelAngles[0], true, 20);
+        drawRing(205, 135, pts, wheelAngles[1], false, 24);
+        drawRing(135, 85, counts, wheelAngles[2], false, 28);
+    }
+
+    function drawRing(outerR, innerR, data, currentAngle, hasPins, fontSize) {
+        const slice = (Math.PI * 2) / 12;
+        ctx.save(); ctx.translate(300, 300); ctx.rotate(currentAngle);
+        data.forEach((text, i) => {
+            const angle = i * slice;
+            ctx.beginPath(); ctx.arc(0, 0, outerR, angle, angle + slice);
+            ctx.arc(0, 0, innerR, angle + slice, angle, true);
+            ctx.fillStyle = (i % 2 === 0) ? "#1a1a1a" : "#2a2a2a";
+            ctx.fill(); ctx.strokeStyle = "#fbc02d"; ctx.lineWidth = 4; ctx.stroke();
+            ctx.save(); ctx.rotate(angle + slice / 2); ctx.textAlign = "center"; ctx.fillStyle = "#fbc02d";
+            ctx.font = `900 ${fontSize}px Arial`; ctx.translate((outerR + innerR) / 2, 0);
+            ctx.rotate(Math.PI / 2); ctx.fillText(text, 0, 7); ctx.restore();
+        });
+        ctx.restore();
+    }
+
+    document.getElementById('spin-btn').addEventListener('click', () => {
+        if (spinning) return; spinning = true;
+        document.getElementById('ok-btn').style.display = 'none';
+        const duration = 4000; const startTime = performance.now();
+        const targets = [(15 + Math.random()*5)*Math.PI*2, -(15 + Math.random()*5)*Math.PI*2, (18 + Math.random()*5)*Math.PI*2];
+        let lastTickAngle = 0;
+
+        function animate(time) {
+            let progress = Math.min((time - startTime) / duration, 1);
+            let easing = 1 - Math.pow(1 - progress, 3);
+            wheelAngles[0] = targets[0] * easing; wheelAngles[1] = targets[1] * easing; wheelAngles[2] = targets[2] * easing;
+            if (Math.abs(wheelAngles[0] - lastTickAngle) >= (Math.PI*2/12)) {
+                playTick(); lastTickAngle = wheelAngles[0];
+                pointerUI.style.transform = "translateX(-50%) rotate(-25deg)";
+                setTimeout(() => pointerUI.style.transform = "translateX(-50%) rotate(0deg)", 50);
+            }
+            draw();
+            if (progress < 1) requestAnimationFrame(animate);
+            else finalize();
+        }
+        requestAnimationFrame(animate);
+    });
+
+    function finalize() {
+        spinning = false;
+        const getVal = (ang, data) => {
+            let a = ang % (Math.PI * 2); if (a < 0) a += (Math.PI * 2);
+            let idx = Math.floor(((Math.PI * 1.5) - a + (Math.PI * 8)) % (Math.PI * 2) / ((Math.PI * 2) / 12));
+            return data[idx % 12];
+        };
+        selectedCat = getVal(wheelAngles[0], cats);
+        wheelScore = parseInt(getVal(wheelAngles[1], pts));
+        selectedCount = getVal(wheelAngles[2], counts);
+        document.getElementById('status-text').innerText = `${selectedCount} HARFLİ ${selectedCat} - ${wheelScore} PUAN`;
+        document.getElementById('ok-btn').style.display = 'block';
+    }
+
+    function goToGamePage() {
+        document.getElementById('game-screen-2').style.display = 'flex';
+        initWordGame();
+    }
+
+    function initWordGame() {
+        isBuldumMode = false;
+        document.getElementById('buldum-btn').style.display = "block";
+        const rules = { "3": { s: 30, sesli: 1, sessiz: 7 }, "4": { s: 40, sesli: 1, sessiz: 8 }, "5": { s: 50, sesli: 2, sessiz: 10 }, "6": { s: 70, sesli: 2, sessiz: 12 }, "7": { s: 100, sesli: 2, sessiz: 15 } };
+        const config = rules[selectedCount] || rules["5"];
+        timeLeft = config.s; sesliHak = config.sesli; sessizHak = config.sessiz;
+        let pool = wordBank[selectedCat] || ["KİTAP"];
+        let validWords = pool.filter(w => w.length === parseInt(selectedCount));
+        targetWord = validWords.length > 0 ? validWords[Math.floor(Math.random()*validWords.length)] : pool[0].substring(0, parseInt(selectedCount));
+        document.getElementById('round-info').innerText = `${selectedCat} (${selectedCount} Harf) - Çark: ${wheelScore}`;
+        guessedLetters = [];
+        document.getElementById('result-area').innerHTML = "";
+        document.getElementById('keyboard').style.pointerEvents = "auto";
+        document.getElementById('continue-btn').style.display = "none";
+        updateDisplay();
+        createKeyboard();
+        startTimer();
+    }
+
+    function startTimer() {
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            document.getElementById('timer').innerText = `SÜRE: ${timeLeft}`;
+            if (timeLeft <= 0) endGame(false);
+        }, 1000);
+    }
+
+    function activateBuldum() {
+        isBuldumMode = true;
+        document.getElementById('buldum-btn').style.display = "none";
+        document.getElementById('rights-display').innerHTML = "<span style='color:#00ff00'>BULDUM MODU AKTİF!</span>";
+        const keys = document.querySelectorAll('.key');
+        keys.forEach(k => { k.disabled = false; k.style.opacity = "1"; });
+    }
+
+    function updateDisplay(isFinal = false) {
+        const display = document.getElementById('word-display');
+        display.innerHTML = "";
+        let win = true;
+        for (let i = 0; i < targetWord.length; i++) {
+            const char = targetWord[i];
+            const box = document.createElement('div');
+            box.className = "letter-box";
+            if (guessedLetters.includes(char)) {
+                box.innerText = char;
+                box.classList.add('letter-revealed');
+            } else {
+                win = false;
+                if (isFinal) { box.innerText = char; box.classList.add('letter-missed'); }
+            }
+            display.appendChild(box);
+        }
+        if(!isBuldumMode) document.getElementById('rights-display').innerText = `Sesli: ${sesliHak} | Sessiz: ${sessizHak}`;
+        if (win && targetWord !== "" && !isFinal) endGame(true);
+    }
+
+    function createKeyboard() {
+        const keys = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
+        const container = document.getElementById('keyboard');
+        container.innerHTML = "";
+        keys.forEach(k => {
+            const btn = document.createElement('button');
+            btn.className = "key"; btn.innerText = k;
+            btn.onclick = () => handleGuess(k, btn);
+            container.appendChild(btn);
+        });
+    }
+
+    function handleGuess(letter, btnEl) {
+        if (btnEl.disabled && !isBuldumMode) return;
+        const sesliler = "AEIİOÖUÜ";
+        const isSesli = sesliler.includes(letter);
+        if (!isBuldumMode) {
+            if (isSesli) { if (sesliHak > 0) sesliHak--; else return; }
+            else { if (sessizHak > 0) sessizHak--; else return; }
+        }
+        btnEl.disabled = true; btnEl.style.opacity = "0.3";
+        if (targetWord.includes(letter)) { guessedLetters.push(letter); updateDisplay(); }
+        else { if (isBuldumMode) endGame(false); else updateDisplay(); }
+    }
+
+    function endGame(win) {
+        clearInterval(timerInterval);
+        updateDisplay(true);
+        const area = document.getElementById('result-area');
+        if (win) {
+            const roundScore = wheelScore * parseInt(selectedCount) * timeLeft;
+            area.innerHTML = `<span style='color:lime'>+${roundScore} PUAN!</span>`;
+            totalScore += roundScore;
+            document.getElementById('cur-val').innerText = roundScore;
+            document.getElementById('tot-val').innerText = totalScore;
+            database.ref(dbPath + playerName).set({ totalScore: totalScore, lastUpdate: Date.now() });
+        } else {
+            area.innerHTML = "<span style='color:red'>KAYBETTİNİZ!</span>";
+        }
+        document.getElementById('continue-btn').style.display = "block";
+        document.getElementById('keyboard').style.pointerEvents = "none";
+        document.getElementById('buldum-btn').style.display = "none";
+    }
+
+    function backToWheel() {
+        document.getElementById('game-screen-2').style.display = 'none';
+        document.getElementById('ok-btn').style.display = 'none';
+        document.getElementById('status-text').innerText = "TEKRAR ÇEVİR!";
+        document.getElementById('cur-val').innerText = "0";
+    }
+
+    function showWorldScore() {
+        const list = document.getElementById('score-list');
+        const myRank = document.getElementById('my-rank-area');
+        list.innerHTML = "Yükleniyor...";
+        myRank.innerHTML = "";
+        document.getElementById('world-screen').style.display = 'flex';
+        database.ref(dbPath).orderByChild('totalScore').once('value').then(snap => {
+            let items = [];
+            snap.forEach(c => {
+                if(c.key && c.val() && c.val().totalScore !== undefined) {
+                    items.push({n: c.key, s: c.val().totalScore});
+                }
+            });
+            items.sort((a,b) => b.s - a.s);
+            myRank.innerHTML = `<div class="score-row my-score"><span>GÜNCEL SKORUN:</span><span>${totalScore}</span></div>`;
+            list.innerHTML = "";
+            items.slice(0, 5).forEach((p, i) => {
+                list.innerHTML += `<div class="score-row"><span>${i+1}. ${p.n}</span><span>${p.s}</span></div>`;
+            });
+            if (items.length === 0) list.innerHTML = "Henüz rekor yok.";
+        });
+    }
+</script>
+</body>
+</html>
