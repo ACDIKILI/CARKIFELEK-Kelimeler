@@ -95,19 +95,20 @@
     const database = firebase.database();
     const dbPath = 'kelime_odasi_players/';
 
+    // EN ZENGİN KELİME ARŞİVİ (3-7 HARF)
     const wordBank = {
-        "İSİM": ["ALİ", "CEM", "EDA", "EMRE", "ELİF", "KEREM", "MERYEM", "AHMET", "HAKAN", "GİZEM"],
-        "EŞYA": ["ÜTÜ", "RAF", "SAAT", "MASA", "DOLAP", "KİTAP", "MAKAS", "KALEM", "ÇANTA"],
-        "BİTKİ": ["GÜL", "OT", "LALE", "MEŞE", "ÇINAR", "YONCA", "SÜMBÜL", "AYÇİÇEK"],
-        "HAYVAN": ["AT", "KUŞ", "KEDİ", "ASLAN", "KAPLAN", "KARTAL", "ZÜRAFA", "BALİNA"],
-        "ÜLKE": ["ÇİN", "RUS", "MISIR", "İTALYA", "FRANSA", "ALMANYA", "TÜRKİYE", "İSPANYA"],
-        "ŞEHİR": ["VAN", "BOLU", "AYDIN", "BURSA", "ANKARA", "İSTANBUL", "BALIKESİR", "İZMİR"],
-        "MESLEK": ["AŞÇI", "HAKİM", "DOKTOR", "AVUKAT", "MÜHENDİS", "ÖĞRETMEN", "MİMAR"],
-        "SPOR": ["KOŞU", "BOKS", "TENİS", "GÜREŞ", "FUTBOL", "HENTBOL", "BASKETBOL"],
-        "GIDA": ["BAL", "TUZ", "EKMEK", "ÇORBA", "PEYNİR", "ZEYTİN", "PİLAV", "HELVA"],
-        "İÇECEK": ["SU", "SÜT", "ÇAY", "KAHVE", "AYRAN", "ŞERBET", "VİŞNE", "SALGAM"],
-        "OYUN": ["DAM", "OKEY", "TAVLA", "DAMA", "SATRANÇ", "DOMİNO", "PİŞPİŞ"],
-        "AĞAÇ": ["ÇAM", "DUT", "MEŞE", "ELMA", "İNCİR", "GÜRGEN", "ZEYTİN", "CEVİZ", "İĞDE"]
+        "İSİM": ["ALİ", "CEM", "EDA", "CAN", "EMRE", "ELİF", "KAYA", "OZAN", "AYDIN", "MERYEM", "KEREM", "AHMET", "HAKAN", "GİZEM", "CENGİZ", "VOLKAN", "CEYLAN", "MUSTAFA", "ABDULLAH"],
+        "EŞYA": ["ÜTÜ", "RAF", "TAS", "ÇAN", "SAAT", "MASA", "KASA", "FIRÇA", "DOLAP", "KİTAP", "MAKAS", "KALEM", "ÇANTA", "SÖZLÜK", "GÖZLÜK", "TELEFON", "ANAHTAR", "KUMANDA"],
+        "BİTKİ": ["GÜL", "OT", "ÇAM", "DAL", "LALE", "MEŞE", "NANE", "KİRAZ", "ÇINAR", "YONCA", "SÜMBÜL", "MENEKŞE", "PAPATYA", "AYÇİÇEK", "KARANFİL", "ZAMBAK", "ORKİDE"],
+        "HAYVAN": ["AT", "KUŞ", "FİL", "AYI", "KEDİ", "FARE", "ASLAN", "KAPLAN", "KARTAL", "ZÜRAFA", "BALİNA", "PENGUEN", "MAYMUN", "TİMSAH", "KANGURU", "ZÜRAFA", "ATMACA"],
+        "ÜLKE": ["ÇİN", "RUS", "FAS", "ÇAD", "MISIR", "İTALYA", "FRANSA", "ALMANYA", "TÜRKİYE", "İSPANYA", "CEZAYİR", "BELÇİKA", "HOLLANDA", "BREZİLYA", "ARJANTİN"],
+        "ŞEHİR": ["VAN", "MUŞ", "BOLU", "UŞAK", "AYDIN", "BURSA", "KONYA", "ANKARA", "İSTANBUL", "BALIKESİR", "İZMİR", "SAMSUN", "ANTALYA", "ERZURUM", "TRABZON"],
+        "MESLEK": ["AŞÇI", "İŞÇİ", "HAKİM", "DOKTOR", "AVUKAT", "MÜDÜR", "MÜHENDİS", "ÖĞRETMEN", "MİMAR", "PİLOT", "BERBER", "KASAP", "MANAV", "RESSAM", "YAZAR"],
+        "SPOR": ["KOŞU", "BOKS", "YOGA", "TENİS", "GÜREŞ", "YÜZME", "FUTBOL", "HENTBOL", "BASKETBOL", "VOLEYBOL", "BİNİCİLİK", "OKÇULUK", "KANO", "SÖRF"],
+        "GIDA": ["BAL", "TUZ", "SÜT", "ÇAY", "EKMEK", "ÇORBA", "ELMA", "PEYNİR", "ZEYTİN", "PİLAV", "HELVA", "MANTI", "KEBAP", "PİROŞKİ", "MAKARNA", "MENEMEN", "YOĞURT"],
+        "İÇECEK": ["SU", "SÜT", "ÇAY", "BİRA", "KAHVE", "AYRAN", "KOLA", "ŞERBET", "VİŞNE", "SALGAM", "GAZOZ", "LİMONATA", "BOZA", "ŞIRA"],
+        "OYUN": ["DAM", "PUZ", "OKEY", "TAVLA", "DAMA", "LOTO", "SATRANÇ", "DOMİNO", "PİŞPİŞ", "MİSKET", "KÖŞEKAPMA", "KÖREBE", "SAKLAMBAÇ", "TOMBOLA"],
+        "AĞAÇ": ["ÇAM", "DUT", "MEŞE", "ELMA", "İNCİR", "KAVAK", "GÜRGEN", "ZEYTİN", "CEVİZ", "İĞDE", "KESTANE", "ARDINÇ", "ÇINAR", "IHLAMUR", "PELİT"]
     };
 
     const cats = ["İSİM", "EŞYA", "BİTKİ", "HAYVAN", "ÜLKE", "ŞEHİR", "MESLEK", "SPOR", "GIDA", "İÇECEK", "OYUN", "AĞAÇ"];
@@ -222,9 +223,12 @@
         const rules = { "3": { s: 30, sesli: 1, sessiz: 7 }, "4": { s: 40, sesli: 1, sessiz: 8 }, "5": { s: 50, sesli: 2, sessiz: 10 }, "6": { s: 70, sesli: 2, sessiz: 12 }, "7": { s: 100, sesli: 2, sessiz: 15 } };
         const config = rules[selectedCount] || rules["5"];
         timeLeft = config.s; sesliHak = config.sesli; sessizHak = config.sessiz;
+        
+        // KRİTİK FİLTRELEME MANTĞI BURASI
         let pool = wordBank[selectedCat] || ["KİTAP"];
         let validWords = pool.filter(w => w.length === parseInt(selectedCount));
         targetWord = validWords.length > 0 ? validWords[Math.floor(Math.random()*validWords.length)] : pool[0].substring(0, parseInt(selectedCount));
+        
         document.getElementById('round-info').innerText = `${selectedCat} (${selectedCount} Harf) - Çark: ${wheelScore}`;
         guessedLetters = [];
         document.getElementById('result-area').innerHTML = "";
