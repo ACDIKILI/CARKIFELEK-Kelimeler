@@ -38,7 +38,28 @@
         .my-score { color: #00ff00; border: 2px solid #00ff00; border-radius: 10px; margin-bottom: 15px; }
     </style>
 
-
+<style>
+  .menu-don-btn {
+    position: absolute;
+    top: 73px;  /* Saatin altına inmesi için 15'ten 55'e çıkardık */
+    left: 60px; /* Kenardan biraz daha açtık */
+    width: 60px;
+    height: 28px;
+    background-color: #2ecc71;
+    border: 2px solid #000000;
+    color: black;
+    font-weight: bold;
+    font-size: 11px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10000; /* En üstte kalması garantilendi */
+    text-decoration: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+</style>
     
 </head>
 <body>
@@ -360,4 +381,5 @@
 </script>
 </body>
 </html>
+
 
