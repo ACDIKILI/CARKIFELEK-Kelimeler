@@ -81,7 +81,7 @@
     </div>
 </div>
 <script>
-    // FIREBASE KUTSAL AYARLAR
+    // KUTSAL AYARLAR
     const firebaseConfig = {
         apiKey: "AIzaSyBbtvGBl8m1x8thDlsUUutvujedIBCC4PA",
         authDomain: "blackjack-4x4.firebaseapp.com",
@@ -95,24 +95,24 @@
     const database = firebase.database();
     const dbPath = 'kelime_odasi_players/';
 
-    // EN ZENGİN KELİME ARŞİVİ (3-7 HARF)
+    // KELİME ARŞİVİ - "AŞÇI" DÜZELTİLDİ
     const wordBank = {
-        "İSİM": ["ALİ", "CEM", "EDA", "CAN", "EMRE", "ELİF", "KAYA", "OZAN", "AYDIN", "MERYEM", "KEREM", "AHMET", "HAKAN", "GİZEM", "CENGİZ", "VOLKAN", "CEYLAN", "MUSTAFA", "ABDULLAH"],
-        "EŞYA": ["ÜTÜ", "RAF", "TAS", "ÇAN", "SAAT", "MASA", "KASA", "FIRÇA", "DOLAP", "KİTAP", "MAKAS", "KALEM", "ÇANTA", "SÖZLÜK", "GÖZLÜK", "TELEFON", "ANAHTAR", "KUMANDA"],
-        "BİTKİ": ["GÜL", "OT", "ÇAM", "DAL", "LALE", "MEŞE", "NANE", "KİRAZ", "ÇINAR", "YONCA", "SÜMBÜL", "MENEKŞE", "PAPATYA", "AYÇİÇEK", "KARANFİL", "ZAMBAK", "ORKİDE"],
-        "HAYVAN": ["AT", "KUŞ", "FİL", "AYI", "KEDİ", "FARE", "ASLAN", "KAPLAN", "KARTAL", "ZÜRAFA", "BALİNA", "PENGUEN", "MAYMUN", "TİMSAH", "KANGURU", "ZÜRAFA", "ATMACA"],
-        "ÜLKE": ["ÇİN", "RUS", "FAS", "ÇAD", "MISIR", "İTALYA", "FRANSA", "ALMANYA", "TÜRKİYE", "İSPANYA", "CEZAYİR", "BELÇİKA", "HOLLANDA", "BREZİLYA", "ARJANTİN"],
-        "ŞEHİR": ["VAN", "MUŞ", "BOLU", "UŞAK", "AYDIN", "BURSA", "KONYA", "ANKARA", "İSTANBUL", "BALIKESİR", "İZMİR", "SAMSUN", "ANTALYA", "ERZURUM", "TRABZON"],
-        "MESLEK": ["AŞÇI", "İŞÇİ", "HAKİM", "DOKTOR", "AVUKAT", "MÜDÜR", "MÜHENDİS", "ÖĞRETMEN", "MİMAR", "PİLOT", "BERBER", "KASAP", "MANAV", "RESSAM", "YAZAR"],
-        "SPOR": ["KOŞU", "BOKS", "YOGA", "TENİS", "GÜREŞ", "YÜZME", "FUTBOL", "HENTBOL", "BASKETBOL", "VOLEYBOL", "BİNİCİLİK", "OKÇULUK", "KANO", "SÖRF"],
-        "GIDA": ["BAL", "TUZ", "SÜT", "ÇAY", "EKMEK", "ÇORBA", "ELMA", "PEYNİR", "ZEYTİN", "PİLAV", "HELVA", "MANTI", "KEBAP", "PİROŞKİ", "MAKARNA", "MENEMEN", "YOĞURT"],
-        "İÇECEK": ["SU", "SÜT", "ÇAY", "BİRA", "KAHVE", "AYRAN", "KOLA", "ŞERBET", "VİŞNE", "SALGAM", "GAZOZ", "LİMONATA", "BOZA", "ŞIRA"],
-        "OYUN": ["DAM", "PUZ", "OKEY", "TAVLA", "DAMA", "LOTO", "SATRANÇ", "DOMİNO", "PİŞPİŞ", "MİSKET", "KÖŞEKAPMA", "KÖREBE", "SAKLAMBAÇ", "TOMBOLA"],
-        "AĞAÇ": ["ÇAM", "DUT", "MEŞE", "ELMA", "İNCİR", "KAVAK", "GÜRGEN", "ZEYTİN", "CEVİZ", "İĞDE", "KESTANE", "ARDINÇ", "ÇINAR", "IHLAMUR", "PELİT"]
+        "İSİM": ["ALİ", "CEM", "EDA", "CAN", "NİL", "ALP", "ECE", "ELA", "GÜL", "NAZ", "NUR", "OYA", "EMRE", "ELİF", "KAYA", "OZAN", "METE", "AKIN", "ÖMER", "OGUZ", "RAUF", "EMİN", "AZİZ", "ATEŞ", "ARZU", "BANU", "BADE", "BUSE", "ESEN", "ECEM", "EBRA", "EMEL", "ESER", "EKİN", "FEZA", "GAYE", "MÜGE", "NİDA", "ÖZER", "İLGİN", "KUTAY", "YASİN", "FULYA", "SİMAY", "HAKAN", "HARUN", "HALUK", "TUĞBA", "TÜLAY", "TİLBE", "DİLEK", "DEFNE", "DUYGU", "CEREN", "BURCU", "EYLEM", "FATMA", "FUNDA", "FEYZA", "GONCA", "ŞENOL", "MISRA", "AYDIN", "KEREM", "AHMET", "HAKAN", "GİZEM", "MERYEM", "CENGİZ", "VOLKAN", "CEYLAN", "BERDAN", "BERRİN", "TANSEL", "ATACAN", "HALDUN", "HAYDAR", "TÜRKAN", "DİLARA", "DİLŞAH", "CENNET", "CANSEL", "CANSIN", "CANDAN", "FERHAN", "FEHİME", "FİKRET", "GÜLBEN", "GÜLDEN", "KEVSER", "MEHTAP", "MUSTAFA", "ALPEREN", "ALEMDAR", "ARMAĞAN", "HİDAYET", "DİLANAY", "DİLRUBA", "DÜRDANE", "CAVİDAN", "CEVRİYE", "BAHRİYE", "FAHRİYE", "FAZİLET", "FİRDEVS", "GÜLENAY", "GÜLİZAR", "LÜTFİYE", "NEZEHAT", "ZÜLEYHA"],
+        "EŞYA": ["ÜTÜ", "RAF", "TAS", "ÇAN", "TOP", "BOT", "BEZ", "ÇAY", "FES", "FİŞ", "FAN", "JAK", "ZİL", "LİF", "MUM", "NAL", "OJE", "ÖRS", "PİL", "RUJ", "SAZ", "TAÇ", "SAAT", "MASA", "KASA", "ATKI", "AYNA", "ASKI", "BERE", "ÖRTÜ", "TAVA", "VAZO", "BANT", "KASE", "ÇİVİ", "VİDA", "ÇAKI", "FİLE", "FAKS", "HALI", "HUNİ", "HURÇ", "KASK", "OLTA", "FIRÇA", "DOLAP", "KİTAP", "MAKAS", "KALEM", "ÇANTA", "KİLİT", "PERDE", "HAVLU", "AMPUL", "AVİZE", "LAMBA", "SEPET", "TABAK", "TORBA", "BİLET", "BIÇAK", "KAŞIK", "ÇATAL", "BEŞİK", "BALTA", "YATAK", "BİDON", "BOHÇA", "BAVUL", "KOLYE", "BİLYE", "FANUS", "SABUN", "CEZVE", "SÖZLÜK", "GÖZLÜK", "KOLTUK", "PEÇETE", "BASKÜL", "HORTUM", "BARDAK", "BASTON", "CETVEL", "CIMBIZ", "CÜZDAN", "SÜRAHİ", "ÇEKYAT", "SÜZGEÇ", "YORGAN", "ÇAKMAK", "TABURE", "SANDIK", "DEMLİK", "TELEFON", "ANAHTAR", "KUMANDA", "ELDİVEN", "BÜYÜTEÇ", "BLENDER", "TENCERE", "BLOKNOT", "BİLEZİK", "BİBERON", "BATARYA", "KAVANOZ", "ÇERÇEVE", "SÜPÜRGE", "DAKTİLO"],
+        "BİTKİ": ["GÜL", "ÇAM", "ÇİM", "DUT", "LALE", "MEŞE", "NANE", "TERE", "ROKA", "TURP", "PAZI", "ÜZÜM", "AYVA", "ERİK", "ÇALI", "KİRAZ", "ÇINAR", "YONCA", "SEDİR", "SÖĞÜT", "LADİN", "BİBER", "MARUL", "SOĞAN", "HAVUÇ", "HIYAR", "KABAK", "BAMYA", "MISIR", "FULYA", "ASTER", "KİRAZ", "DEFNE", "CEVİZ", "SÜMBÜL", "ZAMBAK", "ORKİDE", "PIRASA", "LAHANA", "PANCAR", "ALABAŞ", "KAKTÜS", "NERGİS", "FISTIK", "MENEKŞE", "PAPATYA", "AYÇİÇEK", "DOMATES", "PATATES", "BROKOLİ", "DEREOTU", "KEREVİZ", "ISPANAK", "BEZELYE", "MENEKŞE", "FASULYE", "ENGİNAR", "LAVANTA", "ŞAKAYIK", "MANOLYA", "ORTANCA", "IHLAMUR"],
+        "HAYVAN": ["KUŞ", "FİL", "AYI", "ARI", "KAZ", "BİT", "FOK", "KEDİ", "FARE", "PARS", "EŞEK", "KEÇİ", "BOĞA", "DEVE", "DANA", "KURT", "GÜVE", "İNEK", "JAKO", "LAMA", "ÖKÜZ", "PİRE", "SAKA", "ASLAN", "ÇAKAL", "KÖPEK", "AKREP", "KİRPİ", "VAŞAK", "TİLKİ", "YILAN", "GEYİK", "KOYUN", "MANDA", "SİNEK", "DOĞAN", "MARTI", "GORİL", "BİZON", "BALIK", "ŞAHİN", "DOMUZ", "PANDA", "VATOZ", "SAZAN", "KARGA", "HİNDİ", "HOROZ", "KAPLAN", "KARTAL", "ZÜRAFA", "BALİNA", "MAYMUN", "TİMSAH", "ATMACA", "TAVŞAN", "SANSAR", "SİNCAP", "PORSUK", "KUNDUZ", "YENGEÇ", "AKBABA", "BÜLBÜL", "BAYKUŞ", "ÇAYLAK", "CEYLAN", "LEOPAR", "JAGUAR", "PENGUEN", "KANGURU", "ANTİLOP", "KURBAĞA", "KELEBEK", "AHTAPOT", "PELİKAN", "ÖRÜMCEK"],
+        "ÜLKE": ["ÇİN", "FAS", "ÇAD", "ABD", "FİJİ", "GANA", "GİNE", "GUAM", "KORE", "IRAK", "İRAN", "KÜBA", "LAOS", "MALİ", "PERU", "ŞİLİ", "MISIR", "RUSYA", "GABON", "HAİTİ", "İSVEÇ", "KENYA", "KONGO", "LİBYA", "MALTA", "NEPAL", "NİJER", "SUDAN", "TUNUS", "YEMEN", "ÇEKYA", "İTALYA", "FRANSA", "ANGOLA", "CİBUTİ", "ERİTRE", "GUYANA", "KANADA", "KOSOVA", "KUVEYT", "KIBRIS", "LÜBNAN", "MALAWİ", "NORVEÇ", "PANAMA", "RUANDA", "SOMALİ", "SURİYE", "TAYVAN", "ALMANYA", "TÜRKİYE", "İSPANYA", "CEZAYİR", "BELÇİKA", "ANDORRA", "BAHREYN", "BELARUS", "BERMUDA", "BOLİVYA", "BURUNDİ", "EKVADOR", "ESTONYA", "GAMBİYA", "GRENADA", "İRŞANDA", "İSVİÇRE", "İZLANDA", "JAPONYA", "KAMERUN"],
+        "ŞEHİR": ["VAN", "MUŞ", "BOLU", "UŞAK", "AĞRI", "İÇEL", "KARS", "ORDU", "RİZE", "URFA", "AYDIN", "BURSA", "KONYA", "İZMİR", "AFYON", "ÇORUM", "HATAY", "MUĞLA", "NİĞDE", "SİİRT", "SİNOP", "SİVAS", "TOKAT", "IĞDIR", "KİLİS", "DÜZCE", "ANKARA", "SAMSUN", "AMASYA", "ARTVİN", "BİNGÖL", "BİTLİS", "BURDUR", "EDİRNE", "ELAZIĞ", "MERSİN", "MANİSA", "MARDİN", "YOZGAT", "BATMAN", "ŞIRNAK", "BARTIN", "YALOVA", "ANTALYA", "ERZURUM", "TRABZON", "BİLECİK", "ÇANKIRI", "DENİZLİ", "GİRESUN", "HAKKARİ", "ISPARTA", "KAYSERİ", "KOCAELİ", "KÜTAHYA", "MALATYA", "SAKARYA", "TUNCELİ", "AKSARAY", "BAYBURT", "KARAMAN", "ARDAHAN", "KARABÜK"],
+        "MESLEK": ["ŞEF", "SAV", "AST", "MUH", "VET", "UZM", "ÖĞR", "AŞÇI", "İŞÇİ", "DADI", "GURU", "İMAM", "OKÇU", "PAPA", "VAİZ", "HAKİM", "MİMAR", "KASAP", "YAZAR", "MANAV", "PİLOT", "AKTAR", "TABİP", "HEKİM", "AKTÖR", "SUBAY", "ARICI", "BEKÇİ", "CAMCI", "ÇAYCI", "ÇOBAN", "ÇÖPÇÜ", "ESNAF", "FALCI", "HAKEM", "HAMAL", "DOKTOR", "AVUKAT", "BERBER",  "RESSAM", "KAPTAN", "ARTİST", "BAKICI", "BAKKAL", "BANKER", "BARMEN", "BOYACI", "BOZACI", "BROKER", "CERRAH", "ÇİFTÇİ", "DANSÖZ", "DERİCİ", "ECZACI", "EDİTÖR", "GARSON", "AMBARCI", "ANALİST", "ARABACI", "ARMATÖR", "AVİZECİ", "TAMİRCİ", "BALIKÇI", "BANKACI", "BİYOLOG", "BORSACI", "ÇANTACI", "DAVULCU", "DEMİRCİ", "DENETÇİ", "DÖVİZCİ", "EĞİTMWN", "EMLAKÇI", "FIRINCI"],
+        "SPOR": ["BOX", "JUD", "KAR", "FUT", "BAS", "SKİ", "GYM", "RUN", "KOŞU", "BOKS", "YOGA", "KANO", "SÖRF", "GOLF", "JUDO", "POLO", "DART", "TENİS", "GÜREŞ", "YÜZME", "HOKEY", "KÜREK", "KIZAK", "KAYAK", "PATEN", "RODEO", "FUTBOL", "ESKRİM", "HALTER", "KAYKAY", "KRİKET", "YRLKEN", "SUTOPU", "KARATE", "HENTBOL", "OKÇULUK", "BEYZBOL", "BİLARDO", "BOVLİNG"],
+        "GIDA": ["BAL", "TUZ", "SÜT", "ÇAY", "MUZ", "DUT", "YAĞ", "NAR", "BOZA", "ŞIRA", "ELMA", "ROKA", "TURP", "AYVA", "ERİK", "PAZI", "TERE", "NANE", "KOLA", "BİRA", "EKMEK", "ÇORBA", "PİLAV", "HELVA", "MANTI", "KEBAP", "DOLMA", "CİĞER", "ŞEKER", "BİBER", "SİRKE", "SALÇA", "MISIR", "BALIK", "TURŞU", "REÇEL", "NOHUT", "SOĞAN", "LİMON", "HAVUÇ", "HIYAR", "KABAK", "ARMUT", "CEVİZ", "PEYNİR", "YOĞURT",  "ZEYTİN", "BULGUR", "KETÇAP", "PİRİNÇ", "PIRASA", "LAHANA", "PANCAR", "ŞALGAM", "MANTAR", "FISTIK", "MAKARNA", "MENEMEN", "KABURGA", "PİRZOLA", "BONFİLE", "DOMATES", "MAYONEZ", "ŞEHRİYE", "FASULYE", "PATATES", "DEREOTU", "BROKOLİ", "KEREVİZ", "AVOKADO", "ISPANAK", "ZENCEFİL", "YUMURTA"],
+        "İÇECEK": ["SÜT", "ÇAY", "ELMA", "BİRA", "KOLA", "BOZA", "ŞIRA", "SODA", "KAHVE", "AYRAN", "VİŞNE", "GAZOZ", "ÇORBA", "SALEP", "KEFİR", "ŞURUP", "HOŞAF", "ŞERBET",  "SALGAM"],
+        "OYUN": ["UNO", "DAMA", "OKEY", "LOTO", "LEGO", "KART", "ZEKA", "FİLM", "TABU", "TAVLA", "BİLEZ","DENGE", "JENGA", "PİŞTİ", "İSTOP", "YARIŞ", "DOMİNO", "MİSKET", "KÖREBE", "KELİME", "TAKLİT", "PİNPON", "PUZZLE", "SEKSEK", "SUDOKU", "TOMBALA", "SATRANÇ", "PİNPALL", "MONOPOL", "BULMACA", "FARKBUL"],
+        "AĞAÇ": ["ÇAM", "DUT", "NAR", "HUŞ", "MEŞE", "ELMA", "İĞDE", "ASMA", "ÜZÜM", "ALIÇ", "ERİK", "AYVA", "MAZI", "İNCİR", "KAVAK", "CEVİZ", "ÇINAR", "SEDİR", "LADİN", "ARDIÇ", "KAYIN", "ARMUT", "BADEM", "KİRAZ", "SÖĞÜT", "VİŞNE", "İNCİR", "SERVİ", "SELVİ", "HURMA", "AHLAT", "SIĞLA", "ARDINÇ", "GÜRGEN", "ZEYTİN", "KAYISI", "GÖKNAR", "AKASYA", "KESTANE", "IHLAMUR", "ŞEFTALİ", "KARAÇAM", "SARIÇAM", "ERGUVAN"]
     };
 
     const cats = ["İSİM", "EŞYA", "BİTKİ", "HAYVAN", "ÜLKE", "ŞEHİR", "MESLEK", "SPOR", "GIDA", "İÇECEK", "OYUN", "AĞAÇ"];
-    const pts = ["100", "50", "1000", "1500", "2000", "1000", "150", "100", "1000", "250", "100", "150"];
+    const pts = ["250", "50", "1000", "500", "150", "1000", "50", "100", "150", "250", "100", "500"];
     const counts = ["5", "3", "3", "6", "4", "6", "7", "3", "3", "4", "5", "5"];
 
     let playerName = ""; let totalScore = 0; let wheelScore = 0;
@@ -223,12 +223,9 @@
         const rules = { "3": { s: 30, sesli: 1, sessiz: 7 }, "4": { s: 40, sesli: 1, sessiz: 8 }, "5": { s: 50, sesli: 2, sessiz: 10 }, "6": { s: 70, sesli: 2, sessiz: 12 }, "7": { s: 100, sesli: 2, sessiz: 15 } };
         const config = rules[selectedCount] || rules["5"];
         timeLeft = config.s; sesliHak = config.sesli; sessizHak = config.sessiz;
-        
-        // KRİTİK FİLTRELEME MANTĞI BURASI
         let pool = wordBank[selectedCat] || ["KİTAP"];
         let validWords = pool.filter(w => w.length === parseInt(selectedCount));
         targetWord = validWords.length > 0 ? validWords[Math.floor(Math.random()*validWords.length)] : pool[0].substring(0, parseInt(selectedCount));
-        
         document.getElementById('round-info').innerText = `${selectedCat} (${selectedCount} Harf) - Çark: ${wheelScore}`;
         guessedLetters = [];
         document.getElementById('result-area').innerHTML = "";
@@ -307,7 +304,11 @@
         updateDisplay(true);
         const area = document.getElementById('result-area');
         if (win) {
-            const roundScore = wheelScore * parseInt(selectedCount) * timeLeft;
+            // YENİ PUANLAMA: Çark * Harf * (Kalan Süre / 7)
+            let timeBonus = Math.floor(timeLeft / 7);
+            if (timeBonus < 1) timeBonus = 1;
+            const roundScore = wheelScore * 0.1 * parseInt(selectedCount) * timeBonus;
+            
             area.innerHTML = `<span style='color:lime'>+${roundScore} PUAN!</span>`;
             totalScore += roundScore;
             document.getElementById('cur-val').innerText = roundScore;
